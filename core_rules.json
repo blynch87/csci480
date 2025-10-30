@@ -1,0 +1,873 @@
+{
+  "rules": [
+    {
+      "core_code": "FYS",
+      "subject": "FYS",
+      "numbers": ["178"],
+      "title": "First-Year Seminar",
+      "note": "This requirement is for new First-Year students only and it must be fulfilled in residence."
+    },
+    {
+      "core_code": "WR",
+      "subject": "LANG",
+      "numbers": ["120"],
+      "title": "Academic Writing and Critical Inquiry",
+      "note": "A grade of C- of better is required to fulfill this requirement."
+    },
+    {
+      "core_code": "HUM",
+      "subject": "AMS",
+      "numbers": ["ANY"],
+      "title": "Any AMS course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "HIST",
+      "numbers": ["102"],
+      "title": "The United States Since 1865",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "HIST",
+      "numbers": ["151"],
+      "title": "World History to 1600",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "HIST",
+      "numbers": ["300+"],
+      "title": "HIST courses at the 300-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "HUM",
+      "numbers": ["ANY"],
+      "title": "Any HUM course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "LA",
+      "numbers": ["378"],
+      "title": "Race, Identity, Belonging, and Cultures in the Americas",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "LANG",
+      "numbers": ["ANY"],
+      "title": "Any LANG course.",
+      "note": "Except LANG 120 or other lower level Writing/Composition courses"
+    },
+    {
+      "core_code": "HUM",
+      "subject": "LIT",
+      "numbers": ["ANY"],
+      "title": "Any LIT course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "LL",
+      "numbers": ["ANY"],
+      "title": "Any LL course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "PHIL",
+      "numbers": ["ANY"],
+      "title": "Any PHIL course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "RELS",
+      "numbers": ["ANY"],
+      "title": "Any RELS course.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "ASIA",
+      "numbers": ["200+"],
+      "title": "ASIA courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "CHER",
+      "numbers": ["200+"],
+      "title": "CHER courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "FREN",
+      "numbers": ["200+"],
+      "title": "FREN courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "GERM",
+      "numbers": ["200+"],
+      "title": "GERM courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "GRK",
+      "numbers": ["200+"],
+      "title": "GRK courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "HEB",
+      "numbers": ["200+"],
+      "title": "HEB courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "LAT",
+      "numbers": ["200+"],
+      "title": "LAT courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "PORT",
+      "numbers": ["200+"],
+      "title": "PORT courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "HUM",
+      "subject": "SPAN",
+      "numbers": ["200+"],
+      "title": "SPAN courses at the 200-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ART",
+      "numbers": ["234"],
+      "title": "ARTS: Ceramics I",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ART",
+      "numbers": ["304"],
+      "title": "ARTS: Drawing II",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ART",
+      "numbers": ["374"],
+      "title": "ARTS: Special Topics",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ART",
+      "numbers": ["490"],
+      "title": "ARTS: Senior Exhibition I",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ARTH",
+      "numbers": ["201"],
+      "title": "Introduction to Art History I",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ARTH",
+      "numbers": ["202"],
+      "title": "Introduction to Art History II",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ARTH",
+      "numbers": ["300+"],
+      "title": "ARTH courses at the 300-level or above.",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ARTS",
+      "numbers": ["ANY"],
+      "title": "Any ARTS course.",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "DRAM",
+      "numbers": ["ANY"],
+      "title": "Any DRAM course.",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "MUSC",
+      "numbers": ["ANY"],
+      "title": "Any MUSC course.",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["346"],
+      "title": "Afrofuturism",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "AFST",
+      "numbers": ["ANY"],
+      "title": "Any AFST course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "AIIS",
+      "numbers": ["ANY"],
+      "title": "Any AIIS course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "ANTH",
+      "numbers": ["ANY"],
+      "title": "Any ANTH course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "ASIA",
+      "numbers": ["ANY"],
+      "title": "Any ASIA course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "BUS",
+      "numbers": ["ANY"],
+      "title": "Any BUS course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "ECON",
+      "numbers": ["ANY"],
+      "title": "Any ECON course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "EDUC",
+      "numbers": ["ANY"],
+      "title": "Any EDUC course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "GS",
+      "numbers": ["ANY"],
+      "title": "Any GS course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "HRST",
+      "numbers": ["ANY"],
+      "title": "Any HRST course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "HS",
+      "numbers": ["222"],
+      "title": "Foundations of Public Health",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "HS",
+      "numbers": ["224"],
+      "title": "Mental and Emotional Health",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "HS",
+      "numbers": ["333"],
+      "title": "Food Politics and Nutrition Policy",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "HS",
+      "numbers": ["365"],
+      "title": "Addiction, Drugs, and Health",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "IST",
+      "numbers": ["ANY"],
+      "title": "Any IST course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "MCOM",
+      "numbers": ["ANY"],
+      "title": "Any MCOM course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "MUSC",
+      "numbers": ["350"],
+      "title": "North America, Race and Roots Musics",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "MUSC",
+      "numbers": ["367"],
+      "title": "Music, Culture, and Communication",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "MUSC",
+      "numbers": ["368"],
+      "title": "Music, Power, and Social Identity",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "POLS",
+      "numbers": ["ANY"],
+      "title": "Any POLS course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "PSYC",
+      "numbers": ["ANY"],
+      "title": "Any PSYC course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "SOC",
+      "numbers": ["ANY"],
+      "title": "Any SOC course.",
+      "note": null
+    },
+    {
+      "core_code": "SS",
+      "subject": "WGSS",
+      "numbers": ["ANY"],
+      "title": "Any WGSS course.",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "ASTR",
+      "numbers": ["102"],
+      "title": "Introduction to Astronomy: The Solar System",
+      "note": "Also needs ASTR 112 OR ASTR 113 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "ASTR",
+      "numbers": ["103"],
+      "title": "Introduction to Astronomy: Stars and Galaxies",
+      "note": "Also needs ASTR 112 OR ASTR 113 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "ATMS",
+      "numbers": ["103"],
+      "title": "Introduction to Meteorology",
+      "note": "Also needs ATMS 111 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "BIOL",
+      "numbers": ["125"],
+      "title": "Current Topics in Biology",
+      "note": "Also needs BIOL 126 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "BIOL",
+      "numbers": ["136"],
+      "title": "Principles of Cellular and Molecular Biology",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "BIOL",
+      "numbers": ["328"],
+      "title": "Human Anatomy and Histology",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "CHEM",
+      "numbers": ["109"],
+      "title": "The Food of Chemistry",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "CHEM",
+      "numbers": ["132"],
+      "title": "General Chemistry",
+      "note": "Also needs CHEM 111 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "CHEM",
+      "numbers": ["231"],
+      "title": "Organic Chemistry I",
+      "note": "Also needs CHEM 145 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "CHEM",
+      "numbers": ["233"],
+      "title": "Foundations of Inorganic Chemistry",
+      "note": "Also needs CHEM 145 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "CHEM",
+      "numbers": ["232"],
+      "title": "Organic Chemistry II",
+      "note": "Also needs CHEM 222 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "ENVS",
+      "numbers": ["105"],
+      "title": "The Planet Earth",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "ENVS",
+      "numbers": ["130"],
+      "title": "Introduction to Environmental Science",
+      "note": "Also needs ENVS 171."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "HS",
+      "numbers": ["234"],
+      "title": "Anatomy and Physiology I",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "HS",
+      "numbers": ["235"],
+      "title": "Anatomy and Physiology II",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "PHYS",
+      "numbers": ["101"],
+      "title": "Light and Visual Phenomena",
+      "note": "Also needs PHYS 121 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "PHYS",
+      "numbers": ["102"],
+      "title": "The Physics of Sound and Music",
+      "note": "Also needs PHYS 122 LAB."
+    },
+    {
+      "core_code": "NAT",
+      "subject": "PHYS",
+      "numbers": ["131"],
+      "title": "Introductory Physics I",
+      "note": null
+    },
+    {
+      "core_code": "NAT",
+      "subject": "PHYS",
+      "numbers": ["221"],
+      "title": "Physics I",
+      "note": null
+    },
+    {
+      "core_code": "QR",
+      "subject": "MATH",
+      "numbers": ["ANY"],
+      "title": "Any 4 credit MATH course.",
+      "note": "Must be 4 credits."
+    },
+    {
+      "core_code": "QR",
+      "subject": "STAT",
+      "numbers": ["ANY"],
+      "title": "Any 4 credit STAT course.",
+      "note": "Must be 4 credits."
+    },
+    {
+      "core_code": "SL",
+      "subject": "ASIA",
+      "numbers": ["ANY"],
+      "title": "Any level of ASIA course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "CHER",
+      "numbers": ["ANY"],
+      "title": "Any level of CHER course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "FREN",
+      "numbers": ["ANY"],
+      "title": "Any level of FREN course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "GERM",
+      "numbers": ["ANY"],
+      "title": "Any level of GERM course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "GRK",
+      "numbers": ["ANY"],
+      "title": "Any level of GRK course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "HEB",
+      "numbers": ["ANY"],
+      "title": "Any level of HEB course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "LAT",
+      "numbers": ["ANY"],
+      "title": "Any level of LAT course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "PORT",
+      "numbers": ["ANY"],
+      "title": "Any level of PORT course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SL",
+      "subject": "SPAN",
+      "numbers": ["ANY"],
+      "title": "Any level of SPAN course.",
+      "note": "May also be fulfilled by placement exam."
+    },
+    {
+      "core_code": "SYS",
+      "subject": "SYS",
+      "numbers": ["478"],
+      "title": "Senior-Year Seminar",
+      "note": "This requirement is waived for post-bac student receiving a second degree."
+    },
+
+    {
+      "core_code": "ARTS",
+      "subject": "AFST",
+      "numbers": ["374"],
+      "title": "Special Topics in Africana Studies",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "AIIS",
+      "numbers": ["210"],
+      "title": "American Indian Film Studies",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "AMS",
+      "numbers": ["385"],
+      "title": "Topics in Art and Archaeology",
+      "note": "Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "AMS",
+      "numbers": ["386"],
+      "title": "Topics in Art and Archaeology",
+      "note": "Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "AMS",
+      "numbers": ["393"],
+      "title": "Epic and Tragedy",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ANTH",
+      "numbers": ["322"],
+      "title": "World Archaeology and Culture",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ASIA",
+      "numbers": ["304"],
+      "title": "Chinese Cinema",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "ASIA",
+      "numbers": ["305"],
+      "title": "Close Encounters of the Third Kind: East Asian Cultures through Film",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "CSCI",
+      "numbers": ["173"],
+      "title": "Special Topics in Computer Science",
+      "note": "Must be 3-4 credit hours. Confirm with registrar unless course title is Creative Fabrication: Art Meets Technology"
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "DAN",
+      "numbers": ["202"],
+      "title": "Dance Studies",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "EDUC",
+      "numbers": ["304"],
+      "title": "Teaching Global Citizenship Through the Arts, K-6",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "EDUC",
+      "numbers": ["315"],
+      "title": "Art of the Young Child",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "LANG",
+      "numbers": ["361"],
+      "title": "Poetry Writing Workshop",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "LANG",
+      "numbers": ["374"],
+      "title": "Special Topics in Language",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "LIT",
+      "numbers": ["346"],
+      "title": "Readings in Gender and Sexuality",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "LIT",
+      "numbers": ["374"],
+      "title": "Special Topics in Literature",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "FREN",
+      "numbers": ["374"],
+      "title": "Special Topics in French",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "GERM",
+      "numbers": ["374"],
+      "title": "Special Topics in German",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "GERM",
+      "numbers": ["390"],
+      "title": "Topics in Intermediate German Studies",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "HIST",
+      "numbers": ["374"],
+      "title": "Special Topics in History",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "HON",
+      "numbers": ["373"],
+      "title": "Special Topics in Honors",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "INTS",
+      "numbers": ["374"],
+      "title": "Interdisciplinary Special Topics",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["142"],
+      "title": "New Media History and Theory",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["144"],
+      "title": "History of Animation: From Pencils to Pixels",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["146"],
+      "title": "Video Game Studies",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["344"],
+      "title": "History of Design",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "NM",
+      "numbers": ["374"],
+      "title": "Special Topics in New Media",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "PHIL",
+      "numbers": ["310"],
+      "title": "Philosophies of Art",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "POLS",
+      "numbers": ["315"],
+      "title": "Amplified Voices: Music as Political Expression",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "POLS",
+      "numbers": ["337"],
+      "title": "ReStorying Community",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "POLS",
+      "numbers": ["374"],
+      "title": "Special Topics in Political Science",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "RELS",
+      "numbers": ["280"],
+      "title": "Asian Religious Traditions",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "RELS",
+      "numbers": ["326"],
+      "title": "Religion and Dance in South Asia",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "SOC",
+      "numbers": ["374"],
+      "title": "Special Topics in Sociology",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "SPAN",
+      "numbers": ["332"],
+      "title": "Survey of Spanish-American Civilization and Literature",
+      "note": null
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "SPAN",
+      "numbers": ["373"],
+      "title": "Special Topics in Spanish",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "SPAN",
+      "numbers": ["374"],
+      "title": "Special Topics in Spanish",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    },
+    {
+      "core_code": "ARTS",
+      "subject": "SPAN",
+      "numbers": ["491"],
+      "title": "Topics in Advanced Spanish Studies",
+      "note": "Must be 3-4 credit hours. Confirm with registrar."
+    }
+  ]
+}
