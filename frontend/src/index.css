@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* subtle body tone + readable line length */
+:root {
+  color-scheme: light;
+}
+body {
+  @apply bg-unca-50 text-slate-800 antialiased;
+}
