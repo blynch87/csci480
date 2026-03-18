@@ -5,6 +5,7 @@ import Button from "./components/Button.jsx";
 import ReverseLookup from "./components/ReverseLookup.jsx";
 import TranscriptList from "./components/TranscriptList.jsx";
 import api from "./services/api";
+import AddCourseDropdowns from "./components/AddCourseDropdowns.jsx";
 
 export default function App() {
   const [schoolCode, setSchoolCode] = useState("");
@@ -94,46 +95,27 @@ export default function App() {
               </Button>
             }
           >
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm text-slate-700 mb-1">
-                  School code
-                </label>
-                <input
-                  value={schoolCode}
-                  onChange={(e) => setSchoolCode(e.target.value)}
-                  placeholder="ex. 008310"
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-unca-300"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-slate-700 mb-1">
-                  Course code
-                </label>
-                <input
-                  value={courseCode}
-                  onChange={(e) => setCourseCode(e.target.value)}
-                  placeholder="ex. ACCT 1000"
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-unca-300"
-                />
-              </div>
-              <Button onClick={() => addCourse()}>Add to transcript</Button>
-              <p className="text-xs text-slate-500">
-                Next: we’ll swap these inputs for dropdowns (state → school →
-                course).
-              </p>
-            </div>
+            {/* Whatever inside this panel (dropdowns) */}
+            <AddCourseDropdowns onAdd={addCourse} />
           </Panel>
         </div>
 
-        {/* Transcript + panels */}
+        {/* Transcript */}
         <div className="lg:col-span-2">
           <Panel title="Virtual transcript">
             <TranscriptList transcript={transcript} onRemove={removeCourse} />
           </Panel>
+        </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Full-width bottom row */}
+        <div className="lg:col-span-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Panel title="Reverse lookup">
+              <ReverseLookup onAdd={addCourse} />
+            </Panel>
+
             <Panel title="Core summary">
+              {/* core summary UI here */}
               {!coreSummary ? (
                 <p className="text-sm text-slate-600">
                   Add courses to see which core requirements you’ve met.
@@ -141,12 +123,34 @@ export default function App() {
               ) : (
                 <div className="space-y-4 text-sm">
                   <div>
-                    <div className="font-semibold text-slate-800 mb-1">
+                    <div className="font-semibold text-slate-800 mb-2">
                       Fulfilled
                     </div>
+
                     {coreSummary.fulfilled_requirements?.length ? (
-                      <div className="text-slate-700">
-                        {coreSummary.fulfilled_requirements.join(", ")}
+                      <div className="space-y-2">
+                        {coreSummary.fulfilled_requirements.map((req) => (
+                          <div
+                            key={req}
+                            className="rounded-lg border border-slate-200 p-2"
+                          >
+                            <div className="font-medium text-slate-900">
+                              {req}
+                            </div>
+                            {coreSummary.fulfilled_map?.[req]?.length ? (
+                              <div className="mt-1 text-slate-700">
+                                Met by:{" "}
+                                <span className="text-slate-800">
+                                  {coreSummary.fulfilled_map[req].join(", ")}
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="mt-1 text-slate-600">
+                                Met by: (unknown)
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     ) : (
                       <div className="text-slate-600">None yet</div>
@@ -154,7 +158,7 @@ export default function App() {
                   </div>
 
                   <div>
-                    <div className="font-semibold text-slate-800 mb-1">
+                    <div className="font-semibold text-slate-800 mb-2">
                       Remaining
                     </div>
                     {coreSummary.remaining_requirements?.length ? (
@@ -169,12 +173,6 @@ export default function App() {
                   </div>
                 </div>
               )}
-            </Panel>
-
-            {/* Reverse lookup */}
-            <Panel title="Reverse lookup">
-              {/* ReverseLookup passes {schoolCode, courseCode} */}
-              <ReverseLookup onAdd={addCourse} />
             </Panel>
           </div>
         </div>

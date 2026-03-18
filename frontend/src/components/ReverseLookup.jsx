@@ -1,238 +1,326 @@
 import { useMemo, useState } from "react";
 import api from "../services/api";
 import Button from "./Button";
-import { Table } from "./Table";
-
-// Return the first non-empty candidate
-function pick(...vals) {
-  for (const v of vals) {
-    if (v !== undefined && v !== null && String(v).trim() !== "") return v;
-  }
-  return undefined;
-}
-
-// Normalize one raw record from the API into the shape we need
-function normalize(r) {
-  return {
-    schoolName:
-      pick(r.school_name, r.school, r.SchoolName, r["School Name"]) ||
-      "(Unknown School)",
-    schoolCode: pick(r.school_code, r.schoolCode, r.SchoolCode),
-    stateAbbr: pick(r.state_abbr, r.state, r.stateAbbr, r.State) || "—",
-    courseCode: pick(
-      r.course_code,
-      r.external_course_code,
-      r?.ExternalCourse?.Code,
-      r.code,
-      r.Code
-    ),
-    courseName: pick(
-      r.course_name,
-      r.external_course_name,
-      r?.ExternalCourse?.Name,
-      r.name,
-      r.Name
-    ),
-  };
-}
 
 export default function ReverseLookup({ onAdd }) {
   const [uncaCode, setUncaCode] = useState("");
-  const [results, setResults] = useState([]);
-  const [collapsed, setCollapsed] = useState({}); // state -> boolean (true = collapsed)
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const [filter, setFilter] = useState("");
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState("");
 
-  const toggleState = (state) => {
-    setCollapsed((prev) => ({ ...prev, [state]: !prev[state] }));
-  };
+  // UI selections
+  const [mode, setMode] = useState("NC_CC"); // NC_CC | NC_INSTATE | OOS
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedSchool, setSelectedSchool] = useState("");
 
-  const search = async () => {
+  const runSearch = async () => {
     const code = uncaCode.trim();
     if (!code) return;
-    try {
-      setLoading(true);
-      setErr("");
-      setResults([]);
-      const res = await api.get(
-        `/equivalencies/reverse/${encodeURIComponent(code)}`
-      );
-      const raw = Array.isArray(res.data) ? res.data : [];
-      const normalized = raw.map(normalize);
-      setResults(normalized);
 
-      // Seed all states to collapsed by default
-      const states = [...new Set(normalized.map((n) => n.stateAbbr || "—"))];
-      setCollapsed(Object.fromEntries(states.map((s) => [s, true])));
-    } catch (e) {
-      setErr(
-        "Could not load reverse equivalencies. Check the code and try again."
+    setLoading(true);
+    setError("");
+    setResults([]);
+
+    // reset dropdown selections for new search
+    setSelectedState("");
+    setSelectedSchool("");
+
+    try {
+      const res = await api.get(
+        `/equivalencies/reverse/${encodeURIComponent(code)}`,
       );
+      setResults(res.data || []);
+    } catch (e) {
+      setError("No results found (or server error).");
     } finally {
       setLoading(false);
     }
   };
 
-  const onKeyDown = (e) => {
-    if (e.key === "Enter") search();
-  };
+  // ---- Group results --------------------------------------------------------
 
-  // Filter results client-side by school/course text
-  const filtered = useMemo(() => {
-    const q = filter.trim().toLowerCase();
-    if (!q) return results;
-    return results.filter((r) => {
-      const hay = [r.schoolName, r.stateAbbr, r.courseCode, r.courseName]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(q);
-    });
-  }, [filter, results]);
+  // Helpers (expect backend to provide these fields)
+  // school_type: "CC" | "in-state" | "out-of-state" | "military"
+  // state_abbr: "NC", "VA", etc.
+  const ncCommunityCollegeResults = useMemo(
+    () =>
+      results.filter((r) => r.school_type === "CC" || r.school_type === "cc"),
+    [results],
+  );
 
-  // Group by state abbreviation
-  const groups = useMemo(() => {
-    const map = new Map();
-    for (const rec of filtered) {
-      const key = rec.stateAbbr || "—";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key).push(rec);
+  const ncInstateResults = useMemo(
+    () =>
+      results.filter(
+        (r) =>
+          r.school_type === "in-state" &&
+          (r.state_abbr || "").toUpperCase() === "NC",
+      ),
+    [results],
+  );
+
+  const outOfStateResults = useMemo(
+    () =>
+      results.filter(
+        (r) =>
+          r.school_type === "out-of-state" ||
+          r.school_type === "military" ||
+          ((r.state_abbr || "").toUpperCase() !== "NC" &&
+            r.school_type !== "CC" &&
+            r.school_type !== "in-state"),
+      ),
+    [results],
+  );
+
+  // Unique states for OOS dropdown
+  const oosStates = useMemo(() => {
+    const set = new Set();
+    for (const r of outOfStateResults) {
+      const ab = (r.state_abbr || "").toUpperCase();
+      if (ab) set.add(ab);
+      else set.add("??");
     }
-    // sort states alphabetically; within each group sort by school then course
+    return Array.from(set).sort();
+  }, [outOfStateResults]);
+
+  // Schools for the selected state (OOS)
+  const oosSchoolsForState = useMemo(() => {
+    if (!selectedState) return [];
+    const map = new Map(); // school_code -> school_name
+    for (const r of outOfStateResults) {
+      const ab = ((r.state_abbr || "??") + "").toUpperCase();
+      if (ab !== selectedState) continue;
+      if (!r.school_code) continue;
+      if (!map.has(r.school_code))
+        map.set(r.school_code, r.school_name || r.school_code);
+    }
     return Array.from(map.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([state, arr]) => [
-        state,
-        arr.sort((x, y) => {
-          const a = `${x.schoolName} ${x.courseCode || ""}`.toLowerCase();
-          const b = `${y.schoolName} ${y.courseCode || ""}`.toLowerCase();
-          return a.localeCompare(b);
-        }),
-      ]);
-  }, [filtered]);
+      .map(([school_code, school_name]) => ({ school_code, school_name }))
+      .sort((a, b) => a.school_name.localeCompare(b.school_name));
+  }, [outOfStateResults, selectedState]);
 
-  const expandAll = () => {
-    const states = [...new Set(results.map((n) => n.stateAbbr || "—"))];
-    setCollapsed(Object.fromEntries(states.map((s) => [s, false])));
-  };
+  // Schools for NC in-state dropdown
+  const ncSchools = useMemo(() => {
+    const map = new Map();
+    for (const r of ncInstateResults) {
+      if (!r.school_code) continue;
+      if (!map.has(r.school_code))
+        map.set(r.school_code, r.school_name || r.school_code);
+    }
+    return Array.from(map.entries())
+      .map(([school_code, school_name]) => ({ school_code, school_name }))
+      .sort((a, b) => a.school_name.localeCompare(b.school_name));
+  }, [ncInstateResults]);
 
-  const collapseAll = () => {
-    const states = [...new Set(results.map((n) => n.stateAbbr || "—"))];
-    setCollapsed(Object.fromEntries(states.map((s) => [s, true])));
-  };
+  // What results are currently “in view” based on dropdowns
+  const visibleResults = useMemo(() => {
+    if (mode === "NC_CC") {
+      return ncCommunityCollegeResults;
+    }
+
+    if (mode === "NC_INSTATE") {
+      if (!selectedSchool) return [];
+      return ncInstateResults.filter((r) => r.school_code === selectedSchool);
+    }
+
+    // OOS
+    if (!selectedState || !selectedSchool) return [];
+    return outOfStateResults.filter(
+      (r) =>
+        ((r.state_abbr || "??") + "").toUpperCase() === selectedState &&
+        r.school_code === selectedSchool,
+    );
+  }, [
+    mode,
+    ncCommunityCollegeResults,
+    ncInstateResults,
+    outOfStateResults,
+    selectedState,
+    selectedSchool,
+  ]);
+
+  // ---- Render ---------------------------------------------------------------
 
   return (
     <div className="space-y-3">
-      {err && (
-        <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-          {err}
-        </div>
-      )}
-
-      <div className="flex gap-2">
+      <div>
+        <label className="block text-sm text-slate-700 mb-1">
+          UNCA course code
+        </label>
         <input
           value={uncaCode}
           onChange={(e) => setUncaCode(e.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="ex. LANG 120"
-          className="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-unca-300"
+          className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-unca-300"
         />
-        <Button onClick={search} variant="primary">
-          {loading ? "Searching..." : "Search"}
-        </Button>
       </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter by school or course…"
-          className="flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-unca-300"
-        />
-        {filter && (
-          <Button variant="ghost" onClick={() => setFilter("")}>
-            Clear
-          </Button>
-        )}
-      </div>
+      <Button onClick={runSearch} disabled={loading || !uncaCode.trim()}>
+        {loading ? "Searching..." : "Search"}
+      </Button>
 
-      {results.length > 0 && (
-        <div className="flex items-center gap-2">
-          <Button variant="subtle" onClick={expandAll}>
-            Expand all
-          </Button>
-          <Button variant="subtle" onClick={collapseAll}>
-            Collapse all
-          </Button>
-        </div>
-      )}
-
-      {!loading && results.length === 0 && !err && (
-        <p className="text-sm text-slate-600">
-          Enter a UNCA course code (ex.{" "}
-          <span className="font-medium">LANG 120</span>) to see external
-          matches.
+      {error && (
+        <p className="text-sm text-red-700 border border-red-200 bg-red-50 rounded-lg px-3 py-2">
+          {error}
         </p>
       )}
 
-      {groups.map(([state, rows]) => {
-        // default to collapsed if not explicitly set yet
-        const isCollapsed = Object.prototype.hasOwnProperty.call(
-          collapsed,
-          state
-        )
-          ? !!collapsed[state]
-          : true;
+      {!loading && results.length > 0 && (
+        <>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-700">
+            Results found:{" "}
+            <span className="font-semibold">{results.length}</span>
+          </div>
 
-        const tableRows = rows.map((r, idx) => ({
-          school: `${r.schoolName}${
-            r.stateAbbr && r.stateAbbr !== "—" ? ` (${r.stateAbbr})` : ""
-          }`,
-          external: r.courseCode
-            ? `${r.courseCode}${r.courseName ? ` — ${r.courseName}` : ""}`
-            : "(no external code found)",
-          action:
-            r.schoolCode && r.courseCode && onAdd ? (
-              <Button
-                key={`${r.schoolCode}-${r.courseCode}-${idx}`}
-                variant="subtle"
-                onClick={() =>
-                  onAdd({ schoolCode: r.schoolCode, courseCode: r.courseCode })
-                }
-              >
-                Add
-              </Button>
-            ) : (
-              <span className="text-slate-400">—</span>
-            ),
-        }));
-
-        return (
-          <div key={state} className="space-y-2">
-            <button
-              onClick={() => toggleState(state)}
-              className="w-full text-left px-2 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-sm font-semibold text-slate-800"
+          {/* Mode dropdown */}
+          <div>
+            <label className="block text-sm text-slate-700 mb-1">
+              Browse results
+            </label>
+            <select
+              value={mode}
+              onChange={(e) => {
+                setMode(e.target.value);
+                setSelectedState("");
+                setSelectedSchool("");
+              }}
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 bg-white"
             >
-              {isCollapsed ? "▶" : "▼"} {state}{" "}
-              <span className="font-normal text-slate-600">
-                ({rows.length})
-              </span>
-            </button>
+              <option value="NC_CC">
+                NC community colleges (standardized catalog)
+              </option>
+              <option value="NC_INSTATE">NC colleges (in-state)</option>
+              <option value="OOS">Out-of-state colleges (by state)</option>
+            </select>
 
-            {!isCollapsed && (
-              <Table
-                columns={[
-                  { key: "school", header: "School" },
-                  { key: "external", header: "External course" },
-                  { key: "action", header: "" },
-                ]}
-                rows={tableRows}
-              />
+            {mode === "NC_CC" && (
+              <p className="mt-2 text-xs text-slate-600">
+                Note: All North Carolina community colleges are represented by{" "}
+                <span className="font-semibold">
+                  North Carolina Community College
+                </span>
+                .
+              </p>
             )}
           </div>
-        );
-      })}
+
+          {/* Conditional dropdowns */}
+          {mode === "NC_INSTATE" && (
+            <div>
+              <label className="block text-sm text-slate-700 mb-1">
+                NC school
+              </label>
+              <select
+                value={selectedSchool}
+                onChange={(e) => setSelectedSchool(e.target.value)}
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 bg-white"
+              >
+                <option value="">Select a school</option>
+                {ncSchools.map((s) => (
+                  <option key={s.school_code} value={s.school_code}>
+                    {s.school_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {mode === "OOS" && (
+            <>
+              <div>
+                <label className="block text-sm text-slate-700 mb-1">
+                  State
+                </label>
+                <select
+                  value={selectedState}
+                  onChange={(e) => {
+                    setSelectedState(e.target.value);
+                    setSelectedSchool("");
+                  }}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 bg-white"
+                >
+                  <option value="">Select a state</option>
+                  {oosStates.map((ab) => (
+                    <option key={ab} value={ab}>
+                      {ab}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm text-slate-700 mb-1">
+                  School
+                </label>
+                <select
+                  value={selectedSchool}
+                  onChange={(e) => setSelectedSchool(e.target.value)}
+                  disabled={!selectedState}
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 bg-white disabled:bg-slate-100"
+                >
+                  <option value="">
+                    {!selectedState
+                      ? "Select a state first"
+                      : "Select a school"}
+                  </option>
+                  {oosSchoolsForState.map((s) => (
+                    <option key={s.school_code} value={s.school_code}>
+                      {s.school_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </>
+          )}
+
+          {/* Visible results list */}
+          <div className="space-y-2">
+            {visibleResults.length === 0 ? (
+              <p className="text-sm text-slate-600">
+                Select options above to view matching courses.
+              </p>
+            ) : (
+              visibleResults.map((r, idx) => {
+                const schoolName = r.school_name || "(Unknown school)";
+                const schoolCode = r.school_code;
+                const extCode = r.course_code || "";
+                const extName = r.course_name || "";
+
+                return (
+                  <div
+                    key={`${schoolCode || "noschool"}-${extCode}-${idx}`}
+                    className="rounded-xl border border-slate-200 bg-white px-3 py-2"
+                  >
+                    <div className="text-xs text-slate-600">{schoolName}</div>
+                    <div className="text-sm font-semibold text-slate-900">
+                      {extCode}
+                      {extName ? ` — ${extName}` : ""}
+                    </div>
+
+                    {schoolCode && extCode && onAdd && (
+                      <div className="mt-2">
+                        <Button
+                          variant="ghost"
+                          onClick={() =>
+                            onAdd({ schoolCode, courseCode: extCode })
+                          }
+                        >
+                          Add to transcript
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </>
+      )}
+
+      {!loading && !error && results.length === 0 && (
+        <p className="text-sm text-slate-600">
+          No results yet. Try searching for a UNCA course code.
+        </p>
+      )}
     </div>
   );
 }

@@ -14,7 +14,9 @@ def reverse_lookup(unca_course_code):
         SELECT
             s.name            AS school_name,
             s.school_code     AS school_code,
+            s.type            AS school_type,
             st.abbreviation   AS state_abbr,
+            st.name           AS state_name,
             c.course_code     AS course_code,
             c.course_name     AS course_name
         FROM equivalencies e
@@ -22,7 +24,11 @@ def reverse_lookup(unca_course_code):
         JOIN schools s ON s.school_id = c.school_id
         LEFT JOIN states st ON st.state_id = s.state_id
         WHERE UPPER(e.unca_course_code) = UPPER(%s)
-        ORDER BY st.abbreviation NULLS LAST, s.name, c.course_code;
+        ORDER BY
+            st.abbreviation NULLS LAST,
+            s.type,
+            s.name,
+            c.course_code;
     """, (code,))
 
     rows = cur.fetchall()
@@ -36,17 +42,21 @@ def reverse_lookup(unca_course_code):
             out.append({
                 "school_name": r.get("school_name"),
                 "school_code": r.get("school_code"),
+                "school_type": r.get("school_type"),
                 "state_abbr":  r.get("state_abbr"),
+                "state_name":  r.get("state_name"),
                 "course_code": r.get("course_code"),
                 "course_name": r.get("course_name"),
             })
         else:
-            # tuple-like fallback
-            school_name, school_code, state_abbr, course_code, course_name = r
+            # tuple-like fallback (match the SELECT order!)
+            school_name, school_code, school_type, state_abbr, state_name, course_code, course_name = r
             out.append({
                 "school_name": school_name,
                 "school_code": school_code,
+                "school_type": school_type,
                 "state_abbr":  state_abbr,
+                "state_name":  state_name,
                 "course_code": course_code,
                 "course_name": course_name,
             })
