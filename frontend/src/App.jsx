@@ -7,77 +7,102 @@ import TranscriptList from "./components/TranscriptList.jsx";
 import api from "./services/api";
 import AddCourseDropdowns from "./components/AddCourseDropdowns.jsx";
 
+const TRANSCRIPT_STORAGE_KEY = "unca_virtual_transcript";
+
 export default function App() {
-  const [schoolCode, setSchoolCode] = useState("");
-  const [courseCode, setCourseCode] = useState("");
-  const [transcript, setTranscript] = useState([]);
+  const [transcript, setTranscript] = useState(() => {
+    try {
+      const saved = localStorage.getItem(TRANSCRIPT_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [coreSummary, setCoreSummary] = useState(null);
 
-  // Load transcript + core summary on mount
+  // Save transcript to localStorage whenever it changes
   useEffect(() => {
-    const init = async () => {
-      const res = await api.get("/transcript/");
-      setTranscript(res.data || []);
-      await loadCoreSummary();
-    };
-    init();
-  }, []);
+    localStorage.setItem(TRANSCRIPT_STORAGE_KEY, JSON.stringify(transcript));
+  }, [transcript]);
+
+  // Refresh core summary whenever transcript changes
+  useEffect(() => {
+    loadCoreSummary();
+  }, [transcript]);
 
   const loadCoreSummary = async () => {
     try {
-      const res = await api.get("/transcript/summary");
+      if (!transcript.length) {
+        setCoreSummary(null);
+        return;
+      }
+
+      const res = await api.post("/transcript/summary", {
+        transcript,
+      });
+
       setCoreSummary(res.data);
     } catch (err) {
-      // If transcript is empty, backend returns 400
       setCoreSummary(null);
     }
   };
 
-  // Add course supports BOTH:
-  // 1) manual inputs (uses state)
-  // 2) ReverseLookup "Add" button (passes { schoolCode, courseCode })
   const addCourse = async (payload) => {
-    const school = payload?.schoolCode ?? schoolCode;
-    const course = payload?.courseCode ?? courseCode;
+    const school = payload?.schoolCode;
+    const course = payload?.courseCode;
 
     if (!school || !course) return;
 
-    await api.post("/transcript/add", {
-      school_code: school,
-      course_code: course,
-    });
+    try {
+      // Ask backend to resolve one course into transcript-entry format
+      const res = await api.post("/transcript/resolve", {
+        school_code: school,
+        course_code: course,
+      });
 
-    const res = await api.get("/transcript/");
-    setTranscript(res.data || []);
-    setCourseCode("");
+      const entry = res.data?.course;
+      if (!entry) return;
 
-    await loadCoreSummary(); // auto refresh
+      setTranscript((prev) => {
+        const alreadyExists = prev.some((existing) => {
+          const ext = existing.external_course || {};
+          return (
+            (ext.school_code || "").toUpperCase() === school.toUpperCase() &&
+            (ext.code || "").toUpperCase() === course.toUpperCase()
+          );
+        });
+
+        if (alreadyExists) return prev;
+        return [...prev, entry];
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Error adding course.");
+    }
   };
 
-  const clearTranscript = async () => {
-    await api.post("/transcript/clear");
+  const clearTranscript = () => {
     setTranscript([]);
-    await loadCoreSummary(); // auto refresh (will set null)
+    localStorage.removeItem(TRANSCRIPT_STORAGE_KEY);
+    setCoreSummary(null);
   };
 
-  const removeCourse = async ({ schoolCode, courseCode }) => {
-    await api.post("/transcript/remove", {
-      school_code: schoolCode,
-      course_code: courseCode,
-    });
-
-    const res = await api.get("/transcript/");
-    setTranscript(res.data || []);
-
-    await loadCoreSummary(); // auto refresh
+  const removeCourse = ({ schoolCode, courseCode }) => {
+    setTranscript((prev) =>
+      prev.filter((entry) => {
+        const ext = entry.external_course || {};
+        return !(
+          (ext.school_code || "").toUpperCase() === schoolCode.toUpperCase() &&
+          (ext.code || "").toUpperCase() === courseCode.toUpperCase()
+        );
+      }),
+    );
   };
 
   return (
     <PageShell>
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-unca-900">
-          Transfer Equivalencies
-        </h1>
         <p className="mt-2 text-slate-600 max-w-3xl">
           Build a virtual transcript by adding your courses. See UNCA
           equivalencies instantly.
@@ -85,7 +110,6 @@ export default function App() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Add course */}
         <div className="lg:col-span-1">
           <Panel
             title="Add a course"
@@ -95,19 +119,16 @@ export default function App() {
               </Button>
             }
           >
-            {/* Whatever inside this panel (dropdowns) */}
             <AddCourseDropdowns onAdd={addCourse} />
           </Panel>
         </div>
 
-        {/* Transcript */}
         <div className="lg:col-span-2">
           <Panel title="Virtual transcript">
             <TranscriptList transcript={transcript} onRemove={removeCourse} />
           </Panel>
         </div>
 
-        {/* Full-width bottom row */}
         <div className="lg:col-span-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Panel title="Reverse lookup">
@@ -115,7 +136,25 @@ export default function App() {
             </Panel>
 
             <Panel title="Core summary">
-              {/* core summary UI here */}
+              <div className="text-xs text-slate-600 mb-3">
+                <span className="font-semibold">Core Key:</span>
+                <div className="mt-2 grid grid-cols-2 gap-x-6">
+                  <div>
+                    <div>ARTS — Arts and Ideas</div>
+                    <div>FAD — Foundations of American Democracy</div>
+                    <div>FYS — First-Year Seminar</div>
+                    <div>HUM - Humanities</div>
+                    <div>NAT - Natural Sciences (with Lab)</div>
+                  </div>
+                  <div>
+                    <div>QR — Quantitative Reasoning</div>
+                    <div>SL — Second Language</div>
+                    <div>SS — Social Sciences</div>
+                    <div>SYS - Senior-Year Seminar</div>
+                    <div>WR - Academic Writing and Critical Inquiry</div>
+                  </div>
+                </div>
+              </div>
               {!coreSummary ? (
                 <p className="text-sm text-slate-600">
                   Add courses to see which core requirements you’ve met.

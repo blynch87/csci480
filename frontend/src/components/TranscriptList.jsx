@@ -18,7 +18,7 @@ export default function TranscriptList({ transcript, onRemove }) {
 
         return (
           <div
-            key={`${schoolCode || "noschool"}-${courseCode}-${idx}`}
+            key={`${schoolCode || "noschool"}-${courseCode}`}
             className="rounded-xl border border-slate-200 bg-white shadow-sm"
           >
             {/* Header */}
